@@ -123,7 +123,7 @@
                         </thead>
                         <tbody>
                             <tr>
-                                B<td>H-501</td>
+                                <td>H-501</td>
                                 <td>2023-01-14</td>
                                 <td>L-01</td>
                                 <td>145</td>
@@ -219,7 +219,7 @@
                     <p class="text-sm text-gray-600 mt-1"><strong>Propósito:</strong> Imagen de la maqueta del informe final. Te servirá como guía visual para el diseño.</p>
                 </div>
                 
-                <!-- Ficha 7: modelo_datos.png -->
+                <!-- Ficha 7: modelo_datos.png (NUEVA) -->
                 <div class="border rounded-lg p-4">
                     <a href="modelo_datos.png" download="modelo_datos.png" class="text-blue-600 hover:text-blue-800 hover:underline font-semibold text-lg">
                         `modelo_datos.png`
@@ -375,13 +375,37 @@ ADDCOLUMNS (
     "AñoMes", FORMAT ( [Date], "YYYY-MM" )
 )
 </code></pre>
-                <p><strong>Medidas de Rendimiento:</strong> (Recuerda cambiar `Fact_Viajes` por `VIAJES` si mantienes tus nombres)</p>
+                <!-- INICIO EXPLICACIÓN -->
+                <div class="mt-2 p-3 bg-gray-50 rounded-md border border-gray-200 text-sm">
+                    <p><strong>Funciones Utilizadas:</strong></p>
+                    <ul class="list-disc pl-5 mt-1">
+                        <li><strong>`ADDCOLUMNS`</strong>: Toma una tabla (`CALENDARAUTO`) y le añade nuevas columnas.</li>
+                        <li><strong>`CALENDARAUTO`</strong>: Genera automáticamente una tabla de una sola columna con todas las fechas que existen en tu modelo de datos.</li>
+                        <li><strong>`YEAR`, `FORMAT`, `MONTH`</strong>: Funciones de fecha que extraen partes (el año, el nombre del mes, el número del mes) de la columna `[Date]`.</li>
+                    </ul>
+                    <p class="mt-2"><strong>Propósito:</strong> <em>Crear una tabla de calendario completa y personalizada. Es la "dimensión de tiempo" oficial y es esencial para el análisis de Time Intelligence.</em></p>
+                </div>
+                <!-- FIN EXPLICACIÓN -->
+
+                <p class="pt-4"><strong>Medidas de Rendimiento:</strong> (Recuerda cambiar `Fact_Viajes` por `VIAJES` si mantienes tus nombres)</p>
 <pre><code>Total Pasajeros = SUM(VIAJES[Pasajeros])
 Total Ingresos = SUM(VIAJES[Ingresos])
 Total Viajes = COUNTROWS(VIAJES)
 Retraso Medio (min) = AVERAGE(VIAJES[Retraso_Minutos])
+</code></pre>
+                <!-- INICIO EXPLICACIÓN -->
+                <div class="mt-2 p-3 bg-gray-50 rounded-md border border-gray-200 text-sm">
+                    <p><strong>Funciones Utilizadas:</strong></p>
+                    <ul class="list-disc pl-5 mt-1">
+                        <li><strong>`SUM`</strong>: Suma todos los valores de una columna.</li>
+                        <li><strong>`COUNTROWS`</strong>: Cuenta el número total de filas en una tabla (en este caso, el número de viajes).</li>
+                        <li><strong>`AVERAGE`</strong>: Calcula el promedio aritmético de una columna.</li>
+                    </ul>
+                    <p class="mt-2"><strong>Propósito:</strong> <em>Establecer los KPIs más básicos. Son agregaciones simples que resumen el volumen total de operaciones y el rendimiento promedio.</em></p>
+                </div>
+                <!-- FIN EXPLICACIÓN -->
 
-% de Viajes con Retraso = 
+<pre><code>% de Viajes con Retraso = 
 VAR ViajesConRetraso = 
     CALCULATE(
         [Total Viajes],
@@ -389,8 +413,20 @@ VAR ViajesConRetraso =
     )
 RETURN
     DIVIDE( ViajesConRetraso, [Total Viajes] )
+</code></pre>
+                <!-- INICIO EXPLICACIÓN -->
+                <div class="mt-2 p-3 bg-gray-50 rounded-md border border-gray-200 text-sm">
+                    <p><strong>Funciones Utilizadas:</strong></p>
+                    <ul class="list-disc pl-5 mt-1">
+                        <li><strong>`VAR ... RETURN`</strong>: Sintaxis para almacenar un cálculo (`ViajesConRetraso`) en una variable temporal para hacer la fórmula más legible.</li>
+                        <li><strong>`CALCULATE`</strong>: La función más importante de DAX. Modifica el contexto de filtro. Aquí, la usamos para filtrar la medida `[Total Viajes]` y contar solo las filas donde `Retraso_Minutos` es mayor que 0.</li>
+                        <li><strong>`DIVIDE`</strong>: Divide de forma segura el número de viajes con retraso entre el total, previniendo errores si el total de viajes es cero.</li>
+                    </ul>
+                    <p class="mt-2"><strong>Propósito:</strong> <em>Calcular el porcentaje de viajes que tuvieron *cualquier* retraso. Es un KPI de puntualidad más preciso que el retraso medio.</em></p>
+                </div>
+                <!-- FIN EXPLICACIÓN -->
 
-% Ocupacion Media = 
+<pre><code>% Ocupacion Media = 
 AVERAGEX(
     VIAJES,
     DIVIDE(
@@ -399,7 +435,19 @@ AVERAGEX(
     )
 )
 </code></pre>
-                <p><strong>Medidas de Time Intelligence:</strong></p>
+                <!-- INICIO EXPLICACIÓN -->
+                <div class="mt-2 p-3 bg-gray-50 rounded-md border border-gray-200 text-sm">
+                    <p><strong>Funciones Utilizadas:</strong></p>
+                    <ul class="list-disc pl-5 mt-1">
+                        <li><strong>`AVERAGEX`</strong>: Una función "iteradora". Recorre la tabla `VIAJES` <strong>fila por fila</strong> y realiza el cálculo especificado en el segundo argumento.</li>
+                        <li><strong>`RELATED`</strong>: Obtiene un valor de una tabla relacionada. Para cada fila de `VIAJES`, `RELATED` "salta" a la tabla `Flota` (a través de la relación activa `ID_Tren`) y coge la `Capacidad_Maxima` de ese tren.</li>
+                        <li><strong>`DIVIDE`</strong>: Divide los pasajeros de esa fila entre la capacidad máxima de ese tren.</li>
+                    </ul>
+                    <p class="mt-2"><strong>Propósito:</strong> <em>Calcular la ocupación media real. No podemos dividir `SUM(Pasajeros) / SUM(Capacidad)`. Debemos calcular la ocupación de *cada viaje* individualmente (fila por fila) y *luego* calcular el promedio de todos esos porcentajes.</em></p>
+                </div>
+                <!-- FIN EXPLICACIÓN -->
+
+                <p class="pt-4"><strong>Medidas de Time Intelligence:</strong></p>
 <pre><code>Ingresos PY = 
 CALCULATE(
     [Total Ingresos],
@@ -409,7 +457,19 @@ CALCULATE(
 Crecimiento Ingresos YoY = 
 DIVIDE( [Total Ingresos] - [Ingresos PY], [Ingresos PY] )
 </code></pre>
-                <p><strong>Medida de Relación Inactiva (El Reto):</strong></p>
+                <!-- INICIO EXPLICACIÓN -->
+                <div class="mt-2 p-3 bg-gray-50 rounded-md border border-gray-200 text-sm">
+                    <p><strong>Funciones Utilizadas:</strong></p>
+                    <ul class="list-disc pl-5 mt-1">
+                        <li><strong>`CALCULATE`</strong>: De nuevo, modifica el contexto de filtro.</li>
+                        <li><strong>`SAMEPERIODLASTYEAR`</strong>: Una potente función de Time Intelligence. Toma el contexto de filtro actual (ej. "Año 2024") y lo desplaza automáticamente un año atrás ("Año 2023").</li>
+                        <li><strong>`DIVIDE`</strong>: Calcula el porcentaje de crecimiento (o decrecimiento).</li>
+                    </ul>
+                    <p class="mt-2"><strong>Propósito:</strong> <em>Comparar el rendimiento del período actual con el mismo período del año anterior (Year-over-Year), esencial para medir el crecimiento.</em></p>
+                </div>
+                <!-- FIN EXPLICACIÓN -->
+
+                <p class="pt-4"><strong>Medida de Relación Inactiva (El Reto):</strong></p>
 <pre><code>Viajes por Destino = 
 CALCULATE(
     [Total Viajes],
@@ -419,6 +479,17 @@ CALCULATE(
     )
 )
 </code></pre>
+                <!-- INICIO EXPLICACIÓN -->
+                <div class="mt-2 p-3 bg-gray-50 rounded-md border border-gray-200 text-sm">
+                    <p><strong>Funciones Utilizadas:</strong></p>
+                    <ul class="list-disc pl-5 mt-1">
+                        <li><strong>`CALCULATE`</strong>: Modifica el contexto de filtro.</li>
+                        <li><strong>`USERELATIONSHIP`</strong>: Esta es la función clave. Le dice a DAX que, *solo para este cálculo*, ignore la relación activa (a `ID_Estacion_Origen`) y utilice la relación inactiva (la de puntos) que apunta a `ID_Estacion_Destino`.</li>
+                    </ul>
+                    <p class="mt-2"><strong>Propósito:</strong> <em>Permitir el análisis por estación de destino. Por defecto, cualquier filtro de `ESTACIONES` solo filtraría por "Origen". Esta medida nos permite crear gráficos de "Top Destinos", respondiendo a una pregunta de negocio completamente diferente.</em></p>
+                </div>
+                <!-- FIN EXPLICACIÓN -->
+
             </div>
         </details>
         
@@ -434,8 +505,25 @@ CALCULATE(
                 <ul class="list-disc pl-5 space-y-2">
                     <li><strong>KPIs (Tarjetas):</strong> `[Total Pasajeros]`, `[Total Ingresos]`, `[Retraso Medio (min)]`, `[% Ocupacion Media]`, `[% de Viajes con Retraso]`.</li>
                     <li><strong>Filtros (Slicers):</strong> `Dim_Calendario[Año]`, `ESTACIONES[Region]`, `Lineas[Tipo_Servicio]`.</li>
-                    <li><strong>Tendencia Anual (Gráfico de Área):</strong> Eje X: `Dim_Calendario[Mes]`. Eje Y: `[Total Ingresos]` y `[Ingresos PY]`.</li>
-                    <li><strong>Ingresos por Jefe Regional (Gráfico de Barras):</strong> Eje Y: `ESTACIONES[Jefe_Regional]`. Eje X: `[Total Ingresos]`.</li>
+                    <li><strong>Tendencia Anual (Gráfico de Área):</strong> Eje X: `Dim_Calendario[Mes]`. Eje Y: `[Total Ingresos]` y `[Ingresos PY]`.
+                        <!-- INICIO EXPLICACIÓN NUEVA -->
+                        <div class="mt-2 p-3 bg-yellow-50 border border-yellow-200 rounded-md text-sm">
+                            <p><strong>¡Nota Importante!</strong> Si tu gráfico de tendencia muestra los meses en orden alfabético (Abril, Agosto...) en lugar de cronológico (Enero, Febrero...), necesitas hacer esto:</p>
+                            <ol class="list-decimal pl-5 mt-2">
+                                <li>Ve a la **"Vista de Datos"**.</li>
+                                <li>Selecciona la tabla `Dim_Calendario`.</li>
+                                <li>Haz clic en la columna `Mes` para seleccionarla.</li>
+                                <li>En la pestaña "Herramientas de columnas", haz clic en **"Ordenar por columna"** y elige `NumMes`.</li>
+                            </ol>
+                            <p class="mt-2"><em>Esto le dice a Power BI que ordene la columna de texto "Mes" usando el número de la columna "NumMes".</em></p>
+                        </div>
+                        <!-- FIN EXPLICACIÓN NUEVA -->
+                    </li>
+                    <li><strong>Ingresos por Jefe Regional (Gráfico de Barras horizontales):</strong> Eje Y: `ESTACIONES[Jefe_Regional]`. Eje X: `[Total Ingresos]`.
+                        <ul class="list-circle pl-6 mt-2 text-sm">
+                            <li>Usamos barras horizontales porque las etiquetas de texto (los nombres) se leen mejor que en un gráfico de columnas verticales.</li>
+                        </ul>
+                    </li>
                     <li><strong>Reto Origen vs. Destino (Gráficos de Anillos):</strong>
                         <ul class="list-circle pl-6 mt-2">
                             <li><strong>Anillo Origen:</strong> Leyenda: `ESTACIONES[Nombre_Estacion]`. Valores: `[Total Viajes]`. (Usa un filtro N-Superior = 5).</li>
