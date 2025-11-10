@@ -2,34 +2,491 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Descargar Imagen del Modelo de Datos</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Temario Ejercicio Power BI: FerroIberia</title>
+    <!-- Carga de Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        /* Tipografía Inter */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background-color: #f4f4f5;
-            font-family: sans-serif;
-            flex-direction: column;
+            font-family: 'Inter', sans-serif;
         }
-        img {
-            max-width: 90%;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            border: 1px solid #e2e8f0;
+        /* Oculta el marcador por defecto de <details> */
+        summary {
+            list-style: none; /* Para Firefox */
         }
-        p {
-            font-size: 1.1rem;
-            color: #333;
-            margin-bottom: 20px;
+        summary::-webkit-details-marker {
+            display: none; /* Para Chrome/Safari */
+        }
+        /* Animación del icono '+' */
+        details[open] .plus-minus {
+            transform: rotate(45deg);
+        }
+        /* Estilo para el bloque de código */
+        pre code {
+            font-family: 'Consolas', 'Monaco', 'Andale Mono', 'Ubuntu Mono', monospace;
+            font-size: 0.9em;
+            background-color: #2d3748; /* gray-800 */
+            color: #90cdf4; /* blue-300 */
+            border-radius: 0.375rem; /* rounded-md */
+            padding: 1rem;
+            display: block;
+            overflow-x: auto;
+        }
+        /* Estilos para las tablas de previsualización */
+        .preview-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.875rem; /* text-sm */
+            margin-top: 0.75rem; /* mt-3 */
+        }
+        .preview-table th, .preview-table td {
+            border: 1px solid #e2e8f0; /* border-gray-300 */
+            padding: 0.5rem; /* p-2 */
+            text-align: left;
+        }
+        .preview-table th {
+            background-color: #f7fafc; /* bg-gray-50 */
+            font-weight: 600; /* font-semibold */
         }
     </style>
 </head>
-<body>
-    <p>Haz clic derecho en esta imagen y elige "Guardar imagen como..."</p>
-    <!-- Esta es la imagen del modelo de datos que necesitas. 
-         Ahora sí, con un enlace que funciona. -->
-    <img src="https://i.ibb.co/VvM5Z0v/modelo-datos-ferroiberia.png" alt="Esquema del modelo de datos de Power BI">
+<body class="bg-gray-100 text-gray-800">
+
+    <div class="container mx-auto p-4 md:p-8 max-w-4xl">
+        
+        <!-- Encabezado -->
+        <header class="mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-blue-900 mb-2">Ejercicio Power BI: Análisis "FerroIberia"</h1>
+            <p class="text-lg text-gray-600">Un manual interactivo para construir tu informe de análisis operativo.</p>
+        </header>
+
+        <!-- Introducción -->
+        <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+            <h2 class="text-2xl font-semibold text-blue-800 mb-3">Objetivo del Ejercicio</h2>
+            <p class="text-gray-700">Crear un informe integral que analice el rendimiento de los pasajeros, la puntualidad y la ocupación de los trenes de "FerroIberia", unificando datos de múltiples fuentes y aplicando técnicas avanzadas de modelado y DAX.</p>
+        </div>
+
+        <!-- SECCIÓN DE DESCARGA DE ARCHIVOS (MODIFICADA) -->
+        <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+            <h2 class="text-2xl font-semibold text-blue-800 mb-3">Descarga de Archivos de Datos</h2>
+            <p class="text-gray-700 mb-6">Descarga los archivos necesarios para completar el ejercicio. A continuación se detalla cada archivo, su propósito y una previsualización de sus datos.</p>
+            
+            <div class="space-y-6">
+
+                <!-- Ficha 1: Viajes_2024.csv -->
+                <div class="border rounded-lg p-4">
+                    <a href="Viajes_2024.csv" download="Viajes_2024.csv" class="text-blue-600 hover:text-blue-800 hover:underline font-semibold text-lg">
+                        `Viajes_2024.csv`
+                    </a>
+                    <p class="text-sm text-gray-600 mt-1"><strong>Propósito:</strong> Tabla de Hechos (Fact). Contiene las transacciones de viajes del año en curso (formato nuevo).</p>
+                    <table class="preview-table">
+                        <thead>
+                            <tr>
+                                <th>ID_Viaje</th>
+                                <th>Fecha</th>
+                                <th>ID_Linea</th>
+                                <th>Pasajeros</th>
+                                <th>Ingresos</th>
+                                <th>Retraso_Minutos</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>V-1001</td>
+                                <td>2024-01-15</td>
+                                <td>L-01</td>
+                                <td>150</td>
+                                <td>3000</td>
+                                <td>5</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Ficha 2: Viajes_2023.xlsx -->
+                <div class="border rounded-lg p-4">
+                    <a href="Viajes_2023.xlsx" download="Viajes_2023.xlsx" class="text-blue-600 hover:text-blue-800 hover:underline font-semibold text-lg">
+                        `Viajes_2023.xlsx`
+                    </a>
+                    <p class="text-sm text-gray-600 mt-1"><strong>Propósito:</strong> Tabla de Hechos (Fact). Contiene las transacciones del año pasado (formato antiguo). Requiere renombrar columnas en Power Query.</p>
+                    <table class="preview-table">
+                        <thead>
+                            <tr>
+                                <th>Viaje_Num</th>
+                                <th>Fecha_Operacion</th>
+                                <th>Cod_Linea</th>
+                                <th>Pasajeros_Total</th>
+                                <th>Ingreso_Total_EUR</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                B<td>H-501</td>
+                                <td>2023-01-14</td>
+                                <td>L-01</td>
+                                <td>145</td>
+                                <td>2900</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Ficha 3: Lineas.csv -->
+                <div class="border rounded-lg p-4">
+                    <a href="Lineas.csv" download="Lineas.csv" class="text-blue-600 hover:text-blue-800 hover:underline font-semibold text-lg">
+                        `Lineas.csv`
+                    </a>
+                    <p class="text-sm text-gray-600 mt-1"><strong>Propósito:</strong> Tabla de Dimensión (Dim). Maestro de Líneas, describe cada servicio (AVE, Cercanías, etc.).</p>
+                    <table class="preview-table">
+                        <thead>
+                            <tr>
+                                <th>ID_Linea</th>
+                                <th>Nombre_Linea</th>
+                                <th>Tipo_Servicio</th>
+                                <th>Zona_Tarifaria</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>L-02</td>
+                                <td>AVE Madrid-Sevilla</td>
+                                <td>Alta Velocidad</td>
+                                <td>Corredor Sur</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Ficha 4: Estaciones.xlsx -->
+                <div class="border rounded-lg p-4">
+                    <a href="Estaciones.xlsx" download="Estaciones.xlsx" class="text-blue-600 hover:text-blue-800 hover:underline font-semibold text-lg">
+                        `Estaciones.xlsx`
+                    </a>
+                    <p class="text-sm text-gray-600 mt-1"><strong>Propósito:</strong> Tabla de Dimensión (Dim). Maestro de Estaciones, incluye jerarquía de región y jefe regional.</p>
+                    <table class="preview-table">
+                        <thead>
+                            <tr>
+                                <th>ID_Estacion</th>
+                                <th>Nombre_Estacion</th>
+                                <th>Ciudad</th>
+                                <th>Jefe_Regional</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>E-03</td>
+                                <td>Madrid-Atocha</td>
+                                <td>Madrid</td>
+                                <td>Juan Pérez</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Ficha 5: Flota.csv -->
+                <div class="border rounded-lg p-4">
+                    <a href="Flota.csv" download="Flota.csv" class="text-blue-600 hover:text-blue-800 hover:underline font-semibold text-lg">
+                        `Flota.csv`
+                    </a>
+                    <p class="text-sm text-gray-600 mt-1"><strong>Propósito:</strong> Tabla de Dimensión (Dim). Maestro de Flota, describe cada tren y su capacidad máxima.</p>
+                    <table class="preview-table">
+                        <thead>
+                            <tr>
+                                <th>ID_Tren</th>
+                                <th>Modelo</th>
+                                <th>Capacidad_Maxima</th>
+                                <th>Año_Fabricacion</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>T-20</td>
+                                <td>S-102 'Pato'</td>
+                                <td>350</td>
+                                <td>2007</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Ficha 6: informe.png -->
+                <div class="border rounded-lg p-4">
+                    <a href="informe.png" download="informe.png" class="text-blue-600 hover:text-blue-800 hover:underline font-semibold text-lg">
+                        `informe.png`
+                    </a>
+                    <p class="text-sm text-gray-600 mt-1"><strong>Propósito:</strong> Imagen de la maqueta del informe final. Te servirá como guía visual para el diseño.</p>
+                </div>
+                
+                <!-- Ficha 7: modelo_datos.png -->
+                <div class="border rounded-lg p-4">
+                    <a href="modelo_datos.png" download="modelo_datos.png" class="text-blue-600 hover:text-blue-800 hover:underline font-semibold text-lg">
+                        `modelo_datos.png`
+                    </a>
+                    <p class="text-sm text-gray-600 mt-1"><strong>Propósito:</strong> Imagen del modelo de datos (esquema de estrella) que construiremos.</p>
+                </div>
+
+            </div>
+        </div>
+        <!-- FIN DE LA SECCIÓN DE DESCARGA -->
+
+        <!-- Imagen del Resultado Esperado -->
+        <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+            <h2 class="text-2xl font-semibold text-blue-800 mb-3">Resultado Esperado del Informe</h2>
+            <p class="text-gray-700 mb-4">Esta imagen es una maqueta realista del informe final que construiremos. Te servirá como guía visual durante el ejercicio.</p>
+            <img src="informe.png" alt="Maqueta del informe final de Power BI para FerroIberia" class="w-full rounded-lg shadow-lg border border-gray-200">
+        </div>
+
+        <!-- Acordeón de Fases -->
+        
+        <!-- Fase 0: Preparación -->
+        <details class="bg-white rounded-lg shadow-sm mb-3">
+            <summary class="flex justify-between items-center p-5 cursor-pointer">
+                <span class="text-xl font-semibold text-blue-700">Fase 0: Preparación y Datos de Origen</span>
+                <span class="plus-minus text-2xl text-blue-700 font-light transform transition-transform duration-200">+</span>
+            </summary>
+            <div class="p-5 border-t border-gray-200 text-gray-700 space-y-3">
+                <p>Asegúrate de haber descargado los 5 archivos de datos y las 2 imágenes de maqueta de la sección anterior.</p>
+            </div>
+        </details>
+
+        <!-- Fase 1: Extracción y Transformación (Power Query) -->
+        <details class="bg-white rounded-lg shadow-sm mb-3">
+            <summary class="flex justify-between items-center p-5 cursor-pointer">
+                <span class="text-xl font-semibold text-blue-700">Fase 1: Extracción y Transformación (Power Query)</span>
+                <span class="plus-minus text-2xl text-blue-700 font-light transform transition-transform duration-200">+</span>
+            </summary>
+            <div class="p-5 border-t border-gray-200 text-gray-700 space-y-3">
+                <p>El objetivo es limpiar y unificar los datos en un esquema de estrella.</p>
+                <ul class="list-disc pl-5 space-y-4">
+                    <li><strong>Cargar Orígenes:</strong> Carga los 5 archivos a Power Query ("Transformar datos").</li>
+                    <li><strong>Unificar Tablas de Viajes (Método Recomendado):</strong>
+                        <ul class="list-circle pl-6 mt-2">
+                            <li>Selecciona la consulta `Viajes_2023`.</li>
+                            <li>Renombra todas sus columnas para que coincidan <strong>exactamente</strong> con `Viajes_2024` (ej. `Fecha_Operacion` -> `Fecha`, `Cod_Linea` -> `ID_Linea`, etc.).</li>
+                            <li>Ve a la pestaña "Inicio" > "Anexar consultas" (Append Queries) > <strong>"Anexar consultas como nueva"</strong>.</li>
+                            <li>En la ventana, anexa `Viajes_2024` (como tabla principal) y `Viajes_2023` (como segunda tabla).</li>
+                            <li>Renombra esta nueva consulta unificada (que tiene ~500 filas) a `Fact_Viajes`. (O `VIAJES` si prefieres mantener tus nombres).</li>
+                        </ul>
+                    </li>
+                    <li><strong>Renombrar Consultas de Dimensión (Opcional):</strong>
+                        <ul class="list-circle pl-6 mt-2">
+                            <li>Renombra `Lineas` a `Dim_Lineas`.</li>
+                            <li>Renombra `Estaciones` a `Dim_Estaciones`.</li>
+                            <li>Renombra `Flota` a `Dim_Flota`. (O mantén tus nombres).</li>
+                        </ul>
+                    </li>
+                    <li><strong>Limpiar Tipos de Datos:</strong> En `Fact_Viajes`, asegura que `Fecha` sea tipo *Fecha*, `Pasajeros` y `Retraso_Minutos` sean *Número entero*, e `Ingresos` sea *Número decimal*.</li>
+                    <li><strong>Deshabilitar Carga:</strong> Haz clic derecho en las consultas originales `Viajes_2024` y `Viajes_2023` y desmarca "Habilitar carga". Solo queremos cargar `Fact_Viajes` y las 3 dimensiones.</li>
+                    <li><strong>Cargar y Aplicar:</strong> Haz clic en "Cerrar y aplicar".</li>
+                </ul>
+            </div>
+        </details>
+        
+        <!-- Fase 2: Modelado de Datos -->
+        <details class="bg-white rounded-lg shadow-sm mb-3">
+            <summary class="flex justify-between items-center p-5 cursor-pointer">
+                <span class="text-xl font-semibold text-blue-700">Fase 2: Modelado de Datos (Esquema de Estrella)</span>
+                <span class="plus-minus text-2xl text-blue-700 font-light transform transition-transform duration-200">+</span>
+            </summary>
+            <div class="p-5 border-t border-gray-200 text-gray-700 space-y-3">
+                <p>Construirás un modelo de datos robusto con una dimensión de doble rol (Role-Playing Dimension).</p>
+                
+                <!-- IMAGEN NUEVA AQUÍ -->
+                <div class="my-4">
+                    <h4 class="font-semibold text-lg text-gray-800 mb-2">Esquema del Modelo de Datos</h4>
+                    <p class="text-sm text-gray-600 mb-3">Este es el esquema de estrella que crearemos. Observa la relación de doble rol (activa e inactiva) de la `Dim_Estaciones`.</p>
+                    <img src="modelo_datos.png" alt="Esquema del modelo de datos de Power BI" class="w-full rounded-lg shadow-md border border-gray-200">
+                </div>
+                <!-- FIN IMAGEN NUEVA -->
+
+                <ul class="list-disc pl-5 space-y-4">
+                    <li><strong>Crear `Dim_Calendario` (DAX):</strong>
+                        <ul class="list-circle pl-6 mt-2">
+                            <li>Ve a "Vista de datos" > "Nueva tabla".</li>
+                            <li>Usa el código DAX (ver Fase 3) para crear `Dim_Calendario`.</li>
+                            <li>En "Herramientas de tabla", marca `Dim_Calendario` como "Tabla de fechas" usando la columna `[Date]`.</li>
+                        </ul>
+                        
+                        <div class="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-md">
+                            <h4 class="font-semibold text-lg text-blue-800 mb-3">Nota: ¿Por qué este método? (DAX vs. Power Query vs. Auto)</h4>
+                            <p class="text-sm text-gray-700 mb-3">Hemos discutido 3 formas de crear tablas de calendario. Aquí tienes un resumen de por qué elegimos este método:</p>
+                            
+                            <ol class="list-decimal pl-5 space-y-3">
+                                <li>
+                                    <strong class="text-gray-800">Método 1: `ADDCOLUMNS(CALENDARAUTO())` (El que usamos)</strong>
+                                    <ul class="list-disc pl-5 text-sm">
+                                        <li><strong>Pro:</strong> Control total, eficiente (una sola tabla), optimizado para DAX Time Intelligence. Es la práctica recomendada.</li>
+                                        <li><strong>Con:</strong> Requiere escribir código DAX.</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <strong class="text-gray-800">Método 2: Jerarquía Automática de Power BI ("Auto Date/Time")</strong>
+                                    <ul class="list-disc pl-5 text-sm">
+                                        <li><strong>Pro:</strong> Cero esfuerzo, es automático.</li>
+                                        <li><strong>Con:</strong> Mala práctica. Crea tablas ocultas ineficientes para *cada* campo de fecha, infla el modelo y no es flexible.</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <strong class="text-gray-800">Método 3: Crearla en Power Query (con clics)</strong>
+                                    <ul class="list-disc pl-5 text-sm">
+                                        <li><strong>Pro:</strong> Muy visual, fácil de combinar con otras fuentes (ej. un Excel de festivos).</li>
+                                        <li><strong>Con:</strong> Definir el rango de fechas dinámicamente es un poco más complejo que con `CALENDARAUTO()`.</li>
+                                    </ul>
+                                </li>
+                            </ol>
+                            <p class="text-sm font-medium text-blue-700 mt-3"><strong>Conclusión:</strong> El método DAX `ADDCOLUMNS` es la práctica recomendada por ser el más robusto, eficiente y escalable.</p>
+                        </div>
+                    </li>
+                    <li><strong>Crear Relaciones (Vista de Modelo):</strong>
+                        <ul class="list-circle pl-6 mt-2">
+                            <li>`Dim_Calendario[Date]` (1) -> `Fact_Viajes[Fecha]` (*)</li>
+                            <li>`Dim_Lineas[ID_Linea]` (1) -> `Fact_Viajes[ID_Linea]` (*)</li>
+                            <li>`Dim_Flota[ID_Tren]` (1) -> `Fact_Viajes[ID_Tren]` (*)</li>
+                        </ul>
+                    </li>
+                    <li><strong>Reto: Relaciones de Doble Rol (Estaciones):</strong>
+                        <ul class="list-circle pl-6 mt-2">
+                            <li>Crea una relación <strong>ACTIVA</strong>: `Dim_Estaciones[ID_Estacion]` (1) -> `Fact_Viajes[ID_Estacion_Origen]` (*)</li>
+                            <li>Crea una relación <strong>INACTIVA</strong>: `Dim_Estaciones[ID_Estacion]` (1) -> `Fact_Viajes[ID_Estacion_Destino]` (*). (Power BI la creará inactiva automáticamente).</li>
+                        </ul>
+                    </li>
+                    <li><strong>Ocultar Claves Foráneas:</strong> En `Fact_Viajes`, oculta todas las columnas de ID (`ID_Linea`, `ID_Tren`, `ID_Estacion_Origen`, `ID_Estacion_Destino`, `Fecha`) de la vista de informe.</li>
+                </ul>
+            </div>
+        </details>
+
+        <!-- Fase 3: Medidas Avanzadas (DAX) -->
+        <details class="bg-white rounded-lg shadow-sm mb-3">
+            <summary class="flex justify-between items-center p-5 cursor-pointer">
+                <span class="text-xl font-semibold text-blue-700">Fase 3: Medidas Avanzadas (DAX)</span>
+                <span class="plus-minus text-2xl text-blue-700 font-light transform transition-transform duration-200">+</span>
+            </summary>
+            <div class="p-5 border-t border-gray-200 text-gray-700 space-y-3">
+                <p>Crearás los KPIs centrales del informe. (Sugerencia: crea una "Tabla de Medidas" para organizarlas).</p>
+                <p><strong>Código `Dim_Calendario`:</strong></p>
+<pre><code>Dim_Calendario = 
+ADDCOLUMNS (
+    CALENDARAUTO(),
+    "Año", YEAR ( [Date] ),
+    "Mes", FORMAT ( [Date], "MMMM" ),
+    "NumMes", MONTH ( [Date] ),
+    "AñoMes", FORMAT ( [Date], "YYYY-MM" )
+)
+</code></pre>
+                <p><strong>Medidas de Rendimiento:</strong> (Recuerda cambiar `Fact_Viajes` por `VIAJES` si mantienes tus nombres)</p>
+<pre><code>Total Pasajeros = SUM(VIAJES[Pasajeros])
+Total Ingresos = SUM(VIAJES[Ingresos])
+Total Viajes = COUNTROWS(VIAJES)
+Retraso Medio (min) = AVERAGE(VIAJES[Retraso_Minutos])
+
+% de Viajes con Retraso = 
+VAR ViajesConRetraso = 
+    CALCULATE(
+        [Total Viajes],
+        VIAJES[Retraso_Minutos] &gt; 0
+    )
+RETURN
+    DIVIDE( ViajesConRetraso, [Total Viajes] )
+
+% Ocupacion Media = 
+AVERAGEX(
+    VIAJES,
+    DIVIDE(
+        VIAJES[Pasajeros],
+        RELATED(Flota[Capacidad_Maxima])
+    )
+)
+</code></pre>
+                <p><strong>Medidas de Time Intelligence:</strong></p>
+<pre><code>Ingresos PY = 
+CALCULATE(
+    [Total Ingresos],
+    SAMEPERIODLASTYEAR(Dim_Calendario[Date])
+)
+
+Crecimiento Ingresos YoY = 
+DIVIDE( [Total Ingresos] - [Ingresos PY], [Ingresos PY] )
+</code></pre>
+                <p><strong>Medida de Relación Inactiva (El Reto):</strong></p>
+<pre><code>Viajes por Destino = 
+CALCULATE(
+    [Total Viajes],
+    USERELATIONSHIP(
+        ESTACIONES[ID_Estacion],
+        VIAJES[ID_Estacion_Destino]
+    )
+)
+</code></pre>
+            </div>
+        </details>
+        
+        <!-- Fase 4: Visualización -->
+        <details class="bg-white rounded-lg shadow-sm mb-3">
+            <summary class="flex justify-between items-center p-5 cursor-pointer">
+                <span class="text-xl font-semibold text-blue-700">Fase 4: Visualización e Interactividad</span>
+                <span class="plus-minus text-2xl text-blue-700 font-light transform transition-transform duration-200">+</span>
+            </summary>
+            <div class="p-5 border-t border-gray-200 text-gray-700 space-y-3">
+                <p>Construye un informe de 2 páginas.</p>
+                <h4 class="font-semibold text-lg">Página 1: Resumen Operativo</h4>
+                <ul class="list-disc pl-5 space-y-2">
+                    <li><strong>KPIs (Tarjetas):</strong> `[Total Pasajeros]`, `[Total Ingresos]`, `[Retraso Medio (min)]`, `[% Ocupacion Media]`, `[% de Viajes con Retraso]`.</li>
+                    <li><strong>Filtros (Slicers):</strong> `Dim_Calendario[Año]`, `ESTACIONES[Region]`, `Lineas[Tipo_Servicio]`.</li>
+                    <li><strong>Tendencia Anual (Gráfico de Área):</strong> Eje X: `Dim_Calendario[Mes]`. Eje Y: `[Total Ingresos]` y `[Ingresos PY]`.</li>
+                    <li><strong>Ingresos por Jefe Regional (Gráfico de Barras):</strong> Eje Y: `ESTACIONES[Jefe_Regional]`. Eje X: `[Total Ingresos]`.</li>
+                    <li><strong>Reto Origen vs. Destino (Gráficos de Anillos):</strong>
+                        <ul class="list-circle pl-6 mt-2">
+                            <li><strong>Anillo Origen:</strong> Leyenda: `ESTACIONES[Nombre_Estacion]`. Valores: `[Total Viajes]`. (Usa un filtro N-Superior = 5).</li>
+                            <li><strong>Anillo Destino:</strong> Leyenda: `ESTACIONES[Nombre_Estacion]`. Valores: `[Viajes por Destino]`. (Usa un filtro N-Superior = 5).</li>
+                        </ul>
+                    </li>
+                </ul>
+                <h4 class="font-semibold text-lg mt-4">Página 2: Análisis de Puntualidad y Flota</h4>
+                <ul class="list-disc pl-5 space-y-2">
+                    <li><strong>Drill-through (Obtención de detalles):</strong> Configura esta página para que sea un destino de Drill-through desde `Lineas[Tipo_Servicio]`.</li>
+                    <li><strong>Matriz de Rendimiento:</strong> Filas: `Lineas[Nombre_Linea]`. Valores: `[Total Viajes]`, `[Retraso Medio (min)]`, `[% de Viajes con Retraso]`.</li>
+                    <li><strong>Formato Condicional:</strong> En la matriz, aplica "Barras de datos" (rojas) a la columna `[Retraso Medio (min)]`.</li>
+                    <li><strong>Correlación (Gráfico Combinado):</strong> Eje X: `Dim_Calendario[Mes]`. Columnas (Y): `[Total Pasajeros]`. Líneas (Y): `[Retraso Medio (min)]`.</li>
+                    <li><strong>Detalle de Flota (Gráfico de Barras):</strong> Eje Y: `Flota[Modelo]`. Eje X: `[% Ocupacion Media]`.</li>
+                </ul>
+            </div>
+        </details>
+
+        <!-- Fase 5: Preguntas de Negocio -->
+        <details class="bg-white rounded-lg shadow-sm mb-3">
+            <summary class="flex justify-between items-center p-5 cursor-pointer">
+                <span class="text-xl font-semibold text-blue-700">Fase 5: Preguntas de Negocio (Validación)</span>
+                <span class="plus-minus text-2xl text-blue-700 font-light transform transition-transform duration-200">+</span>
+            </summary>
+            <div class="p-5 border-t border-gray-200 text-gray-700 space-y-3">
+                <p>Usa tu informe interactivo para encontrar las respuestas.</p>
+                <ol class="list-decimal pl-5 space-y-4">
+                    <li>
+                        <strong>Pregunta:</strong> ¿Cuál fue el `Total Ingresos` y el `Retraso Medio` del "Alta Velocidad" en la región "Cataluña" durante 2024?
+                        <br><strong>Respuesta:</strong> En la Página 1, selecciona los filtros "2024", "Cataluña" y "Alta Velocidad". Lee las tarjetas de KPI.
+                    </li>
+                    <li>
+                        <strong>Pregunta:</strong> ¿Qué Jefe Regional (`Jefe_Regional`) gestiona las estaciones con más viajes (como origen)?
+                        <br><strong>Respuesta:</strong> En la Página 1, mira el gráfico de "Ingresos por Jefe Regional". (Nota: el gráfico es de ingresos, pero la pregunta es sobre viajes. ¡Podrías cambiar el gráfico a `[Total Viajes]` para responderla con más precisión!).
+                    </li>
+                    <li>
+                        <strong>Pregunta:</strong> Usando la Página 1, ¿cuál es la estación de destino (`Nombre_Estacion`) más popular?
+                        <br><strong>Respuesta:</strong> Mira el gráfico "Top 5 Estaciones de Destino".
+                    </li>
+                    <li>
+                        <strong>Pregunta:</strong> Usando el drill-through a la Página 2 para "Cercanías", ¿qué línea (`Nombre_Linea`) tiene el peor `[% de Viajes con Retraso]`?
+                        <br><strong>Respuesta:</strong> En la Página 1, haz clic derecho en el filtro "Cercanías" > "Obtención de detalles" > "Análisis Detalle". Mira la matriz en la Página 2.
+                    </li>
+                </ol>
+            </div>
+        </details>
+        
+        <footer class="text-center text-gray-500 mt-8">
+            <p>Fin del ejercicio. ¡Buen trabajo!</p>
+        </footer>
+    </div>
+
 </body>
 </html>
