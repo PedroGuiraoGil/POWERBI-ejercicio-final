@@ -502,11 +502,27 @@ CALCULATE(
             <div class="p-5 border-t border-gray-200 text-gray-700 space-y-3">
                 <p>Construye un informe de 2 páginas.</p>
                 <h4 class="font-semibold text-lg">Página 1: Resumen Operativo</h4>
-                <ul class="list-disc pl-5 space-y-2">
-                    <li><strong>KPIs (Tarjetas):</strong> `[Total Pasajeros]`, `[Total Ingresos]`, `[Retraso Medio (min)]`, `[% Ocupacion Media]`, `[% de Viajes con Retraso]`.</li>
-                    <li><strong>Filtros (Slicers):</strong> `Dim_Calendario[Año]`, `ESTACIONES[Region]`, `Lineas[Tipo_Servicio]`.</li>
+                <ul class="list-disc pl-5 space-y-4"> <!-- Aumentado space-y-4 para más separación -->
+                    <li><strong>KPIs (Tarjetas):</strong> `[Total Pasajeros]`, `[Total Ingresos]`, `[Retraso Medio (min)]`, `[% Ocupacion Media]`, `[% de Viajes con Retraso]`.
+                        <!-- INICIO EXPLICACIÓN NUEVA -->
+                        <p class="text-sm text-gray-600 pl-4 mt-1">
+                            <strong>Intención:</strong> Mostrar los indicadores clave de un vistazo. Responden a la pregunta: "¿Cómo vamos *ahora mismo*?".
+                        </p>
+                        <!-- FIN EXPLICACIÓN NUEVA -->
+                    </li>
+                    <li><strong>Filtros (Slicers):</strong> `Dim_Calendario[Año]`, `ESTACIONES[Region]`, `Lineas[Tipo_Servicio]`.
+                        <!-- INICIO EXPLICACIÓN NUEVA -->
+                        <p class="text-sm text-gray-600 pl-4 mt-1">
+                            <strong>Intención:</strong> Permitir al usuario segmentar todo el informe. Responden a: "¿Qué pasa si solo miro *este* año, *esta* región o *este* tipo de servicio?".
+                        </p>
+                        <!-- FIN EXPLICACIÓN NUEVA -->
+                    </li>
                     <li><strong>Tendencia Anual (Gráfico de Área):</strong> Eje X: `Dim_Calendario[Mes]`. Eje Y: `[Total Ingresos]` y `[Ingresos PY]`.
                         <!-- INICIO EXPLICACIÓN NUEVA -->
+                        <p class="text-sm text-gray-600 pl-4 mt-1">
+                            <strong>Intención:</strong> Comparar el rendimiento (Ingresos) mes a mes contra el año pasado. Responde a: "¿Vamos mejor o peor que el año pasado en esta misma época?".
+                        </p>
+                        <!-- FIN EXPLICACIÓN NUEVA -->
                         <div class="mt-2 p-3 bg-yellow-50 border border-yellow-200 rounded-md text-sm">
                             <p><strong>¡Nota Importante!</strong> Si tu gráfico de tendencia muestra los meses en orden alfabético (Abril, Agosto...) en lugar de cronológico (Enero, Febrero...), necesitas hacer esto:</p>
                             <ol class="list-decimal pl-5 mt-2">
@@ -517,27 +533,67 @@ CALCULATE(
                             </ol>
                             <p class="mt-2"><em>Esto le dice a Power BI que ordene la columna de texto "Mes" usando el número de la columna "NumMes".</em></p>
                         </div>
-                        <!-- FIN EXPLICACIÓN NUEVA -->
                     </li>
                     <li><strong>Ingresos por Jefe Regional (Gráfico de Barras horizontales):</strong> Eje Y: `ESTACIONES[Jefe_Regional]`. Eje X: `[Total Ingresos]`.
+                        <!-- INICIO EXPLICACIÓN NUEVA -->
+                        <p class="text-sm text-gray-600 pl-4 mt-1">
+                            <strong>Intención:</strong> Identificar qué regiones (gestionadas por un jefe) están generando más ingresos. Responde a: "¿Quiénes son mis mejores (o peores) gerentes regionales en términos de ingresos?".
+                        </p>
+                        <!-- FIN EXPLICACIÓN NUEVA -->
                         <ul class="list-circle pl-6 mt-2 text-sm">
                             <li>Usamos barras horizontales porque las etiquetas de texto (los nombres) se leen mejor que en un gráfico de columnas verticales.</li>
                         </ul>
                     </li>
                     <li><strong>Reto Origen vs. Destino (Gráficos de Anillos):</strong>
+                        <!-- INICIO EXPLICACIÓN NUEVA -->
+                        <p class="text-sm text-gray-600 pl-4 mt-1">
+                            <strong>Intención:</strong> Mostrar el flujo de pasajeros. Responden a dos preguntas distintas: "¿Desde dónde sale la gente?" (Origen, usando `[Total Viajes]`) y "¿Hacia dónde va la gente?" (Destino, usando `[Viajes por Destino]`).
+                        </p>
+                        <!-- FIN EXPLICACIÓN NUEVA -->
                         <ul class="list-circle pl-6 mt-2">
                             <li><strong>Anillo Origen:</strong> Leyenda: `ESTACIONES[Nombre_Estacion]`. Valores: `[Total Viajes]`. (Usa un filtro N-Superior = 5).</li>
                             <li><strong>Anillo Destino:</strong> Leyenda: `ESTACIONES[Nombre_Estacion]`. Valores: `[Viajes por Destino]`. (Usa un filtro N-Superior = 5).</li>
                         </ul>
                     </li>
                 </ul>
-                <h4 class="font-semibold text-lg mt-4">Página 2: Análisis de Puntualidad y Flota</h4>
-                <ul class="list-disc pl-5 space-y-2">
-                    <li><strong>Drill-through (Obtención de detalles):</strong> Configura esta página para que sea un destino de Drill-through desde `Lineas[Tipo_Servicio]`.</li>
-                    <li><strong>Matriz de Rendimiento:</strong> Filas: `Lineas[Nombre_Linea]`. Valores: `[Total Viajes]`, `[Retraso Medio (min)]`, `[% de Viajes con Retraso]`.</li>
-                    <li><strong>Formato Condicional:</strong> En la matriz, aplica "Barras de datos" (rojas) a la columna `[Retraso Medio (min)]`.</li>
-                    <li><strong>Correlación (Gráfico Combinado):</strong> Eje X: `Dim_Calendario[Mes]`. Columnas (Y): `[Total Pasajeros]`. Líneas (Y): `[Retraso Medio (min)]`.</li>
-                    <li><strong>Detalle de Flota (Gráfico de Barras):</strong> Eje Y: `Flota[Modelo]`. Eje X: `[% Ocupacion Media]`.</li>
+                
+                <h4 class="font-semibold text-lg mt-6">Página 2: Análisis de Puntualidad y Flota</h4>
+                <ul class="list-disc pl-5 space-y-4"> <!-- Aumentado space-y-4 para más separación -->
+                    <li><strong>Drill-through (Obtención de detalles):</strong> Configura esta página para que sea un destino de Drill-through desde `Lineas[Tipo_Servicio]`.
+                        <!-- INICIO EXPLICACIÓN NUEVA -->
+                        <p class="text-sm text-gray-600 pl-4 mt-1">
+                            <strong>Intención:</strong> Conectar la Página 1 (resumen) con la Página 2 (detalle). Permite al usuario hacer clic derecho en "Cercanías" y saltar a esta página para ver *solo* los datos de "Cercanías".
+                        </p>
+                        <!-- FIN EXPLICACIÓN NUEVA -->
+                    </li>
+                    <li><strong>Matriz de Rendimiento:</strong> Filas: `Lineas[Nombre_Linea]`. Valores: `[Total Viajes]`, `[Retraso Medio (min)]`, `[% de Viajes con Retraso]`.
+                        <!-- INICIO EXPLICACIÓN NUEVA -->
+                        <p class="text-sm text-gray-600 pl-4 mt-1">
+                            <strong>Intención:</strong> Proporcionar datos tabulares detallados. Responde a: "Dame los números exactos de retraso y ocupación para *cada línea de tren*".
+                        </p>
+                        <!-- FIN EXPLICACIÓN NUEVA -->
+                    </li>
+                    <li><strong>Formato Condicional:</strong> En la matriz, aplica "Barras de datos" (rojas) a la columna `[Retraso Medio (min)]`.
+                        <!-- INICIO EXPLICACIÓN NUEVA -->
+                        <p class="text-sm text-gray-600 pl-4 mt-1">
+                            <strong>Intención:</strong> Añadir una capa visual rápida a la matriz. Ayuda a identificar instantáneamente las líneas con peores retrasos (las barras rojas más largas).
+                        </p>
+                        <!-- FIN EXPLICACIÓN NUEVA -->
+                    </li>
+                    <li><strong>Correlación (Gráfico Combinado):</strong> Eje X: `Dim_Calendario[Mes]`. Columnas (Y): `[Total Pasajeros]`. Líneas (Y): `[Retraso Medio (min)]`.
+                        <!-- INICIO EXPLICACIÓN NUEVA -->
+                        <p class="text-sm text-gray-600 pl-4 mt-1">
+                            <strong>Intención:</strong> Buscar una relación entre dos medidas. Responde a: "¿Existe una correlación? ¿Cuándo tenemos más retrasos (línea), bajan los pasajeros (columnas) al mes siguiente?".
+                        </p>
+                        <!-- FIN EXPLICACIÓN NUEVA -->
+                    </li>
+                    <li><strong>Detalle de Flota (Gráfico de Barras):</strong> Eje Y: `Flota[Modelo]`. Eje X: `[% Ocupacion Media]`.
+                        <!-- INICIO EXPLICACIÓN NUEVA -->
+                        <p class="text-sm text-gray-600 pl-4 mt-1">
+                            <strong>Intención:</strong> Analizar la eficiencia de los activos. Responde a: "¿Qué modelos de tren estamos usando de forma más eficiente (más llenos) y cuáles están infrautilizados?".
+                        </p>
+                        <!-- FIN EXPLICACIÓN NUEVA -->
+                    </li>
                 </ul>
             </div>
         </details>
