@@ -590,13 +590,89 @@ CALCULATE(
                     <li><strong>Detalle de Flota (Gráfico de Barras):</strong> Eje Y: `Flota[Modelo]`. Eje X: `[% Ocupacion Media]`.
                         <!-- INICIO EXPLICACIÓN NUEVA -->
                         <p class="text-sm text-gray-600 pl-4 mt-1">
-                            <strong>Intención:</strong> Analizar la eficiencia de los activos. Responde a: "¿Qué modelos de tren estamos usando de forma más eficiente (más llenos) y cuáles están infrautilizados?".
+                            <strong>Intención:</strong> Analizar la eficiencia de los activos *para el Tipo de Servicio seleccionado*. Responde a: "Dentro de 'Cercanías', ¿qué modelo de tren va más lleno?". (Nota: Este gráfico es filtrado por el Drill-through).
                         </p>
                         <!-- FIN EXPLICACIÓN NUEVA -->
                     </li>
                 </ul>
             </div>
         </details>
+
+        <!-- ################################################## -->
+        <!-- NUEVA SECCIÓN: FASE 4 (AVANZADA)                  -->
+        <!-- ################################################## -->
+        <details class="bg-white rounded-lg shadow-sm mb-3">
+            <summary class="flex justify-between items-center p-5 cursor-pointer">
+                <span class="text-xl font-semibold text-blue-700">Fase 4 (Avanzada): Interacción y Filtros Globales</span>
+                <span class="plus-minus text-2xl text-blue-700 font-light transform transition-transform duration-200">+</span>
+            </summary>
+            <div class="p-5 border-t border-gray-200 text-gray-700 space-y-3">
+                <p>Vamos a añadir dos funciones avanzadas: un intercambiador de vistas con Marcadores (Bookmarks) y un Filtro Global para todo el informe.</p>
+                
+                <h4 class="font-semibold text-lg pt-2">Reto 1: Navegación con Marcadores (Bookmarks)</h4>
+                <p class="text-sm text-gray-600 pl-1 mt-1">
+                    <strong>Intención:</strong> Permitir al usuario cambiar todos los gráficos de la "Página 1" para que muestren un análisis de `[Total Ingresos]` o de `[Total Pasajeros]` con solo un clic.
+                </p>
+                <ol class="list-decimal pl-5 space-y-4">
+                    <li>
+                        <strong>Preparar el Panel de Selección (Selection Pane):</strong>
+                        <ul class="list-circle pl-6 mt-2 space-y-1 text-sm">
+                            <li>Ve a la "Página 1". En la pestaña "Ver", activa el panel de <strong>"Selección"</strong>.</li>
+                            <li>Crea dos gráficos nuevos: 1) `[Total Pasajeros]` por `Jefe_Regional` y 2) `[Total Pasajeros]` por `Mes`.</li>
+                            <li>Coloca el gráfico de Pasajeros/JefeRegional *exactamente encima* del de Ingresos/JefeRegional. Haz lo mismo con los gráficos de tendencia.</li>
+                            <li>En el panel de Selección, <strong>renombra</strong> tus gráficos (ej. "graf_Ingresos_Jefe" y "graf_Pasajeros_Jefe").</li>
+                            <li>Crea dos grupos: Clic en "Grupo" y nombra uno "Grupo Ingresos" y otro "Grupo Pasajeros". Arrastra los gráficos correspondientes a cada grupo.</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Crear los Marcadores (Bookmarks):</strong>
+                        <ul class="list-circle pl-6 mt-2 space-y-1 text-sm">
+                            <li>En la pestaña "Ver", activa el panel de <strong>"Marcadores"</strong> (Bookmarks).</li>
+                            <li><strong>Marcador "Vista Ingresos":</strong> En el panel de Selección, haz "visible" (clic en el icono del ojo) el "Grupo Ingresos" y "oculta" el "Grupo Pasajeros". Haz clic en "Agregar" en el panel de Marcadores. Renombra el marcador a "Vista Ingresos".</li>
+                            <li>Haz clic en los tres puntos (...) del marcador y <strong>desmarca la opción "Datos"</strong>. (¡Esto es vital! Solo queremos cambiar la visibilidad, no los filtros).</li>
+                            <li><strong>Marcador "Vista Pasajeros":</strong> Invierte la visibilidad (oculta Ingresos, muestra Pasajeros). Agrega un nuevo marcador, llámalo "Vista Pasajeros" y <strong>desmarca "Datos"</strong>.</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Asignar Marcadores a Botones:</strong>
+                        <ul class="list-circle pl-6 mt-2 space-y-1 text-sm">
+                            <li>En "Insertar" > "Botones", añade dos botones de "En blanco".</li>
+                            <li>Escribe "Ver Ingresos" en uno y "Ver Pasajeros" en otro (en el panel "Formato" > "Texto").</li>
+                            <li>Selecciona el botón "Ver Ingresos". En "Formato" > "Acción" (actívala), selecciona Tipo: "Marcador" y Marcador: "Vista Ingresos".</li>
+                            <li>Repite la operación para el botón "Ver Pasajeros", vinculándolo al marcador "Vista Pasajeros".</li>
+                            <li>¡Prueba tus botones! (Con Ctrl+Clic en Power BI Desktop).</li>
+                        </ul>
+                    </li>
+                </ol>
+
+                <h4 class="font-semibold text-lg pt-4">Reto 2: Filtro Global del Informe</h4>
+                <p class="text-sm text-gray-600 pl-1 mt-1">
+                    <strong>Intención:</strong> Crear una versión del informe que esté *permanentemente* filtrada por un concepto de negocio (ej. "Alta Velocidad"), sin que el usuario pueda cambiarlo fácilmente.
+                </p>
+                <ol class="list-decimal pl-5 space-y-4">
+                    <li>
+                        <strong>Abrir el Panel de Filtros:</strong>
+                        <ul class="list-circle pl-6 mt-2 space-y-1 text-sm">
+                            <li>En la "Vista de Informe", asegúrate de que el panel "Filtros" esté visible.</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Aplicar Filtro en Todas las Páginas:</strong>
+                        <ul class="list-circle pl-6 mt-2 space-y-1 text-sm">
+                            <li>Busca la sección en el panel de Filtros llamada <strong>"Filtros en todas las páginas"</strong> (Filters on all pages).</li>
+                            <li>Arrastra el campo `Lineas[Tipo_Servicio]` a esta caja.</li>
+                            <li>En las opciones de filtrado, selecciona "Alta Velocidad".</li>
+                            <li>¡Listo! Ahora *todas las páginas* (Página 1 y 2) y *todos los cálculos* del informe están filtrados para mostrar solo "Alta Velocidad".</li>
+                            <li>Para evitar que los usuarios lo quiten, puedes hacer clic en el icono del "candado" para bloquear el filtro y en el icono del "ojo" para ocultarlo.</li>
+                        </ul>
+                    </li>
+                </ol>
+
+            </div>
+        </details>
+        <!-- ################################################## -->
+        <!-- FIN DE LA NUEVA SECCIÓN                            -->
+        <!-- ################################################## -->
 
         <!-- Fase 5: Preguntas de Negocio -->
         <details class="bg-white rounded-lg shadow-sm mb-3">
@@ -622,6 +698,11 @@ CALCULATE(
                     <li>
                         <strong>Pregunta:</strong> Usando el drill-through a la Página 2 para "Cercanías", ¿qué línea (`Nombre_Linea`) tiene el peor `[% de Viajes con Retraso]`?
                         <br><strong>Respuesta:</strong> En la Página 1, haz clic derecho en el filtro "Cercanías" > "Obtención de detalles" > "Análisis Detalle". Mira la matriz en la Página 2.
+                    </li>
+                    <!-- PREGUNTA NUEVA -->
+                    <li>
+                        <strong>Pregunta (Avanzada):</strong> Usando tus nuevos botones de marcadores, ¿qué Jefe Regional genera más *Ingresos* y qué Jefe Regional gestiona más *Pasajeros*? ¿Es el mismo?
+                        <br><strong>Respuesta:</strong> Usa los botones "Ver Ingresos" y "Ver Pasajeros" en la Página 1 y compara el ranking del gráfico de Jefes Regionales.
                     </li>
                 </ol>
             </div>
