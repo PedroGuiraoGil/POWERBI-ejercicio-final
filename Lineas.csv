@@ -1,0 +1,8 @@
+ID_Linea,Nombre_Linea,Tipo_Servicio,Zona_Tarifaria
+L-01,Cercanías Madrid C1,Cercanías,Zona 1
+L-02,AVE Madrid-Sevilla,Alta Velocidad,Corredor Sur
+L-03,Regional Exprés C-A,Regional,Corredor Centro
+L-04,AVE Madrid-Barcelona,Alta Velocidad,Corredor NE
+L-05,Media Distancia VLC-BCN,Media Distancia,Corredor Med
+L-06,Cercanías Barcelona R1,Cercanías,Zona 1
+L-07,AVE Madrid-Valencia,Alta Velocidad,Corredor Levante
