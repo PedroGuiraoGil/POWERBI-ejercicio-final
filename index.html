@@ -248,8 +248,7 @@
                                 <td>T-20</td>
                                 <td>S-102 'Pato'</td>
                                 <td>350</td>
-                                <div><pre><code>(Continúa...)
-</code></pre></div></td>
+                                <td>2007</td>
                             </tr>
                         </tbody>
                     </table>
@@ -549,4 +548,101 @@ CALCULATE(
                         <br><strong>Intención:</strong> Analizar la eficiencia de los modelos de tren *usados en el Tipo de Servicio seleccionado*. Responde a: "Para Cercanías, ¿qué modelo se llena más?".</li>
                 </ul>
             </div>
-        </deta
+        </details>
+
+        <!-- Fase 4 (Avanzada): Marcadores y Filtros Globales -->
+        <details class="bg-white rounded-lg shadow-sm mb-3">
+            <summary class="flex justify-between items-center p-5 cursor-pointer">
+                <span class="text-xl font-semibold text-blue-700">Fase 4 (Avanzada): Interacción y Filtros Globales</span>
+                <span class="plus-minus text-2xl text-blue-700 font-light transform transition-transform duration-200">+</span>
+            </summary>
+            <div class="p-5 border-t border-gray-200 text-gray-700 space-y-3">
+                <p><strong>Intención:</strong> Añadir capas de interactividad profesional al informe.</p>
+                
+                <h4 class="font-semibold text-lg">Reto 1: Navegación con Marcadores (Bookmarks)</h4>
+                <p>Vamos a crear dos botones en la Página 1 para alternar un gráfico entre "Ver Ingresos" y "Ver Pasajeros".</p>
+                <ol class="list-decimal pl-5 space-y-2">
+                    <li><strong>Activar Paneles:</strong> Ve a la pestaña "Ver" y activa el panel de "Marcadores" (Bookmarks) y el panel de "Selección".</li>
+                    <li><strong>Crear Gráficos:</strong> En la Página 1, crea dos gráficos de barras y ponlos *exactamente en el mismo sitio*, uno encima del otro:
+                        <ul class="list-circle pl-6 mt-2">
+                            <li><strong>Gráfico A:</strong> Ingresos por `Dim_Lineas[Tipo_Servicio]`</li>
+                            <li><strong>Gráfico B:</strong> Pasajeros por `Dim_Lineas[Tipo_Servicio]`</li>
+                        </ul>
+                    </li>
+                    <li><strong>Crear Marcador "Ver Ingresos":</strong>
+                        <ul class="list-circle pl-6 mt-2">
+                            <li>En el panel de "Selección", oculta el Gráfico B (Pasajeros) haciendo clic en el icono del ojo.</li>
+                            <li>Asegúrate de que el Gráfico A (Ingresos) esté visible.</li>
+                            <li>En el panel "Marcadores", haz clic en "Añadir". Renombra el marcador a "Ver Ingresos".</li>
+                            <li>Haz clic en los "..." del marcador y desmarca la opción "Datos" (¡muy importante! para que el marcador solo cambie la visibilidad, no los filtros).</li>
+                        </ul>
+                    </li>
+                    <li><strong>Crear Marcador "Ver Pasajeros":</strong>
+                        <ul class="list-circle pl-6 mt-2">
+                            <li>Ahora, en "Selección", oculta el Gráfico A (Ingresos) y muestra el Gráfico B (Pasajeros).</li>
+                            <li>En "Marcadores", haz clic en "Añadir". Renombra el marcador a "Ver Pasajeros".</li>
+                            <li>Haz clic en los "..." y desmarca "Datos".</li>
+                        </ul>
+                    </li>
+                    <li><strong>Crear Botones:</strong>
+                        <ul class="list-circle pl-6 mt-2">
+                            <li>Ve a "Insertar" > "Botones" > "En blanco". Crea dos botones.</li>
+                            <li>En el panel "Formato" del primer botón, activa "Acción", selecciona "Tipo" = "Marcador" y "Marcador" = "Ver Ingresos".</li>
+                            <li>Haz lo mismo para el segundo botón, pero asígnalo al marcador "Ver Pasajeros".</li>
+                        </ul>
+                    </li>
+                    <li>Prueba tus botones (usando Ctrl + Clic en el Desktop).</li>
+                </ol>
+
+                <h4 class="font-semibold text-lg mt-4">Reto 2: Filtro Global del Informe</h4>
+                <p>Vamos a filtrar *todo el informe* (todas las páginas) para que solo muestre datos de "Alta Velocidad".</p>
+                <ol class="list-decimal pl-5 space-y-2">
+                    <li><strong>Activar Panel:</strong> Asegúrate de que el panel "Filtros" esté visible (pestaña "Ver").</li>
+                    <li><strong>Añadir Filtro:</strong> Arrastra `Dim_Lineas[Tipo_Servicio]` al panel "Filtros".</li>
+                    <li><strong>Configurar Alcance:</strong> Arrástralo a la tarjeta que dice "Filtros de todas las páginas".</li>
+                    <li><strong>Aplicar Filtro:</strong> En la tarjeta del filtro, selecciona "Alta Velocidad".</li>
+                    <li>Ahora, todas las páginas de tu informe (Página 1, Página 2...) estarán filtradas por "Alta Velocidad".</li>
+                </ol>
+            </div>
+        </details>
+
+        <!-- Fase 5: Preguntas de Negocio -->
+        <details class="bg-white rounded-lg shadow-sm mb-3">
+            <summary class="flex justify-between items-center p-5 cursor-pointer">
+                <span class="text-xl font-semibold text-blue-700">Fase 5: Preguntas de Negocio (Validación)</span>
+                <span class="plus-minus text-2xl text-blue-700 font-light transform transition-transform duration-200">+</span>
+            </summary>
+            <div class="p-5 border-t border-gray-200 text-gray-700 space-y-3">
+                <p><strong>Intención:</strong> Usar el informe interactivo final para encontrar las respuestas a preguntas de negocio específicas.</p>
+                <ol class="list-decimal pl-5 space-y-4">
+                    <li>
+                        <strong>Pregunta:</strong> ¿Cuál fue el `Total Ingresos` y el `Retraso Medio` del "Alta Velocidad" en la región "Cataluña" durante 2024?
+                        <br><strong>Respuesta:</strong> En la Página 1, selecciona los filtros "2024", "Cataluña" y "Alta Velocidad". Lee las tarjetas de KPI.
+                    </li>
+                    <li>
+                        <strong>Pregunta:</strong> ¿Qué Jefe Regional (`Jefe_Regional`) gestiona las estaciones con más viajes (como origen)?
+                        <br><strong>Respuesta:</strong> En la Página 1, mira el gráfico de "Ingresos por Jefe Regional". (Nota: el gráfico es de ingresos. ¡Podrías cambiar el gráfico a `[Total Viajes]` o usar los marcadores que creaste para responderla con más precisión!).
+                    </li>
+                    <li>
+                        <strong>Pregunta:</strong> Usando la Página 1, ¿cuál es la estación de destino (`Nombre_Estacion`) más popular?
+                        <br><strong>Respuesta:</strong> Mira el gráfico "Top 5 Estaciones de Destino".
+                    </li>
+                    <li>
+                        <strong>Pregunta:</strong> Usando el drill-through a la Página 2 para "Cercanías", ¿qué línea (`Nombre_Linea`) tiene el peor `[% de Viajes con Retraso]`?
+                        <br><strong>Respuesta:</strong> En la Página 1, haz clic derecho en el filtro "Cercanías" > "Obtención de detalles" > "Análisis Detalle". Mira la matriz en la Página 2.
+                    </li>
+                    <li>
+                        <strong>Pregunta (Avanzada):</strong> Usando los marcadores, ¿el "Tipo de Servicio" con más ingresos es también el que tiene más pasajeros?
+                        <br><strong>Respuesta:</strong> En la Página 1, alterna los botones "Ver Ingresos" y "Ver Pasajeros" y compara los gráficos.
+                    </li>
+                </ol>
+            </div>
+        </details>
+        
+        <footer class="text-center text-gray-500 mt-8">
+            <p>Fin del ejercicio. ¡Buen trabajo!</p>
+        </footer>
+    </div>
+
+</body>
+</html>
