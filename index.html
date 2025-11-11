@@ -325,7 +325,7 @@
                     
                     <li><strong>Renombrar Consultas de Dimensión:</strong>
                         <ul class="list-circle pl-6 mt-2">
-                            <li>(Opcional, recomendado) Renombra `Lineas` a `Dim_Lineas`, `Estaciones` a `Dim_Estaciones`, `Flota` a `Dim_Flota`.</li>
+                            <li>(Opcional, recomendado) Renombra `Lineas` a `Lineas`, `Estaciones` a `Estaciones`, `Flota` a `Flota`.</li>
                         </ul>
                     </li>
                     
@@ -395,14 +395,14 @@
                     <li><strong>Crear Relaciones (Vista de Modelo):</strong>
                         <ul class="list-circle pl-6 mt-2">
                             <li>`Dim_Calendario[Date]` (1) -> `Viajes[Fecha]` (*)</li>
-                            <li>`Dim_Lineas[ID_Linea]` (1) -> `Viajes[ID_Linea]` (*)</li>
-                            <li>`Dim_Flota[ID_Tren]` (1) -> `Viajes[ID_Tren]` (*)</li>
+                            <li>`Lineas[ID_Linea]` (1) -> `Viajes[ID_Linea]` (*)</li>
+                            <li>`Flota[ID_Tren]` (1) -> `Viajes[ID_Tren]` (*)</li>
                         </ul>
                     </li>
                     <li><strong>Reto: Relaciones de Doble Rol (Estaciones):</strong>
                         <ul class="list-circle pl-6 mt-2">
-                            <li>Crea una relación <strong>ACTIVA</strong>: `Dim_Estaciones[ID_Estacion]` (1) -> `Viajes[ID_Estacion_Origen]` (*)</li>
-                            <li>Crea una relación <strong>INACTIVA</strong>: `Dim_Estaciones[ID_Estacion]` (1) -> `Viajes[ID_Estacion_Destino]` (*). (Power BI la creará inactiva automáticamente).</li>
+                            <li>Crea una relación <strong>ACTIVA</strong>: `Estaciones[ID_Estacion]` (1) -> `Viajes[ID_Estacion_Origen]` (*)</li>
+                            <li>Crea una relación <strong>INACTIVA</strong>: `Estaciones[ID_Estacion]` (1) -> `Viajes[ID_Estacion_Destino]` (*). (Power BI la creará inactiva automáticamente).</li>
                         </ul>
                     </li>
                     <li><strong>Ocultar Claves Foráneas:</strong> En `Viajes`, oculta todas las columnas de ID (`ID_Linea`, `ID_Tren`, `ID_Estacion_Origen`, `ID_Estacion_Destino`, `Fecha`) de la vista de informe.</li>
@@ -459,12 +459,12 @@ AVERAGEX(
     Viajes,
     DIVIDE(
         Viajes[Pasajeros],
-        RELATED(Dim_Flota[Capacidad_Maxima])
+        RELATED(Flota[Capacidad_Maxima])
     )
 )
 </code></pre>
                     <p class="text-sm mt-2 text-gray-600"><strong>`% de Viajes con Retraso`</strong>: Usa <strong>`CALCULATE`</strong> para modificar el contexto de filtro y contar solo los viajes donde `Retraso_Minutos > 0`. Luego <strong>`DIVIDE`</strong> de forma segura (evita errores de división por cero).</p>
-                    <p class="text-sm mt-2 text-gray-600"><strong>`% Ocupacion Media`</strong>: Usa <strong>`AVERAGEX`</strong> para iterar fila por fila de la tabla `Viajes`. En cada fila, usa <strong>`RELATED`</strong> para "saltar" de la tabla `Viajes` a `Dim_Flota` (a través de la relación) y coger la `Capacidad_Maxima` de ese tren. Finalmente, calcula el promedio de todas esas ocupaciones individuales.</p>
+                    <p class="text-sm mt-2 text-gray-600"><strong>`% Ocupacion Media`</strong>: Usa <strong>`AVERAGEX`</strong> para iterar fila por fila de la tabla `Viajes`. En cada fila, usa <strong>`RELATED`</strong> para "saltar" de la tabla `Viajes` a `Flota` (a través de la relación) y coger la `Capacidad_Maxima` de ese tren. Finalmente, calcula el promedio de todas esas ocupaciones individuales.</p>
                 </div>
 
                 <p class="font-semibold text-lg mt-2">Medidas de Time Intelligence:</p>
@@ -487,7 +487,7 @@ DIVIDE( [Total Ingresos] - [Ingresos PY], [Ingresos PY] )
 CALCULATE(
     [Total Viajes],
     USERELATIONSHIP(
-        Dim_Estaciones[ID_Estacion],
+        Estaciones[ID_Estacion],
         Viajes[ID_Estacion_Destino]
     )
 )
@@ -511,20 +511,20 @@ CALCULATE(
                     <li><strong>KPIs (Tarjetas):</strong> `[Total Pasajeros]`, `[Total Ingresos]`, `[Retraso Medio (min)]`, `[% Ocupacion Media]`, `[% de Viajes con Retraso]`.
                         <br><strong>Intención:</strong> Dar una visión general e instantánea de los indicadores más importantes.</li>
                     
-                    <li><strong>Filtros (Slicers):</strong> `Dim_Calendario[Año]`, `Dim_Estaciones[Region]`, `Dim_Lineas[Tipo_Servicio]`.
+                    <li><strong>Filtros (Slicers):</strong> `Dim_Calendario[Año]`, `Estaciones[Region]`, `Lineas[Tipo_Servicio]`.
                         <br><strong>Intención:</strong> Permitir al usuario segmentar todo el informe por las dimensiones de negocio clave.</li>
                     
                     <li><strong>Tendencia Anual (Gráfico de Área):</strong> Eje X: `Dim_Calendario[Mes]`. Eje Y: `[Total Ingresos]` y `[Ingresos PY]`.
                         <br><strong>Intención:</strong> Comparar el rendimiento de ingresos actual con el del año pasado, mes a mes.
                         <br><strong class="text-red-600">¡Nota Importante!</strong> Si los meses salen en desorden (Abril, Agosto...), ve a la "Vista de Datos", selecciona la columna `Mes` y, en "Herramientas de Columnas", usa "Ordenar por columna" para ordenarla por `NumMes`.</li>
                     
-                    <li><strong>Ingresos por Jefe Regional (Gráfico de Barras horizontales):</strong> Eje Y: `Dim_Estaciones[Jefe_Regional]`. Eje X: `[Total Ingresos]`.
+                    <li><strong>Ingresos por Jefe Regional (Gráfico de Barras horizontales):</strong> Eje Y: `Estaciones[Jefe_Regional]`. Eje X: `[Total Ingresos]`.
                         <br><strong>Intención:</strong> Identificar el rendimiento por responsable de región. Se usan barras horizontales porque los nombres de los jefes son largos y se leen mejor.</li>
                     
                     <li><strong>Reto Origen vs. Destino (Gráficos de Anillos):</strong>
                         <ul class="list-circle pl-6 mt-2">
-                            <li><strong>Anillo Origen:</strong> Leyenda: `Dim_Estaciones[Nombre_Estacion]`. Valores: `[Total Viajes]`. (Usa un filtro N-Superior = 5).</li>
-                            <li><strong>Anillo Destino:</strong> Leyenda: `Dim_Estaciones[Nombre_Estacion]`. Valores: `[Viajes por Destino]`. (Usa un filtro N-Superior = 5).</li>
+                            <li><strong>Anillo Origen:</strong> Leyenda: `Estaciones[Nombre_Estacion]`. Valores: `[Total Viajes]`. (Usa un filtro N-Superior = 5).</li>
+                            <li><strong>Anillo Destino:</strong> Leyenda: `Estaciones[Nombre_Estacion]`. Valores: `[Viajes por Destino]`. (Usa un filtro N-Superior = 5).</li>
                         </ul>
                         <strong>Intención:</strong> Comparar rápidamente las estaciones más populares de salida (usando la relación activa) y de llegada (usando la medida `[Viajes por Destino]` con la relación inactiva).
                     </li>
@@ -532,10 +532,10 @@ CALCULATE(
                 
                 <h4 class="font-semibold text-lg mt-4">Página 2: Análisis de Puntualidad y Flota</h4>
                 <ul class="list-disc pl-5 space-y-4">
-                    <li><strong>Drill-through (Obtención de detalles):</strong> Configura esta página para que sea un destino de Drill-through desde `Dim_Lineas[Tipo_Servicio]`.
+                    <li><strong>Drill-through (Obtención de detalles):</strong> Configura esta página para que sea un destino de Drill-through desde `Lineas[Tipo_Servicio]`.
                         <br><strong>Intención:</strong> Permitir al usuario saltar desde un resumen en la Página 1 (ej. "Cercanías") a esta página para ver un desglose detallado *solo* de "Cercanías".</li>
                     
-                    <li><strong>Matriz de Rendimiento:</strong> Filas: `Dim_Lineas[Nombre_Linea]`. Valores: `[Total Viajes]`, `[Retraso Medio (min)]`, `[% de Viajes con Retraso]`.
+                    <li><strong>Matriz de Rendimiento:</strong> Filas: `Lineas[Nombre_Linea]`. Valores: `[Total Viajes]`, `[Retraso Medio (min)]`, `[% de Viajes con Retraso]`.
                         <br><strong>Intención:</strong> Ver el rendimiento detallado por línea específica.</li>
                     
                     <li><strong>Formato Condicional:</strong> En la matriz, aplica "Barras de datos" (rojas) a la columna `[Retraso Medio (min)]`.
@@ -544,7 +544,7 @@ CALCULATE(
                     <li><strong>Correlación (Gráfico Combinado):</strong> Eje X: `Dim_Calendario[Mes]`. Columnas (Y): `[Total Pasajeros]`. Líneas (Y): `[Retraso Medio (min)]`.
                         <br><strong>Intención:</strong> Analizar la correlación entre dos métricas. Responde a: "¿Los retrasos (línea) impactan el volumen de pasajeros (columnas) al mes siguiente?".</li>
                     
-                    <li><strong>Detalle de Flota (Gráfico de Barras):</strong> Eje Y: `Dim_Flota[Modelo]`. Eje X: `[% Ocupacion Media]`.
+                    <li><strong>Detalle de Flota (Gráfico de Barras):</strong> Eje Y: `Flota[Modelo]`. Eje X: `[% Ocupacion Media]`.
                         <br><strong>Intención:</strong> Analizar la eficiencia de los modelos de tren *usados en el Tipo de Servicio seleccionado*. Responde a: "Para Cercanías, ¿qué modelo se llena más?".</li>
                 </ul>
             </div>
@@ -565,8 +565,8 @@ CALCULATE(
                     <li><strong>Activar Paneles:</strong> Ve a la pestaña "Ver" y activa el panel de "Marcadores" (Bookmarks) y el panel de "Selección".</li>
                     <li><strong>Crear Gráficos:</strong> En la Página 1, crea dos gráficos de barras y ponlos *exactamente en el mismo sitio*, uno encima del otro:
                         <ul class="list-circle pl-6 mt-2">
-                            <li><strong>Gráfico A:</strong> Ingresos por `Dim_Lineas[Tipo_Servicio]`</li>
-                            <li><strong>Gráfico B:</strong> Pasajeros por `Dim_Lineas[Tipo_Servicio]`</li>
+                            <li><strong>Gráfico A:</strong> Ingresos por `Lineas[Tipo_Servicio]`</li>
+                            <li><strong>Gráfico B:</strong> Pasajeros por `Lineas[Tipo_Servicio]`</li>
                         </ul>
                     </li>
                     <li><strong>Crear Marcador "Ver Ingresos":</strong>
@@ -598,7 +598,7 @@ CALCULATE(
                 <p>Vamos a filtrar *todo el informe* (todas las páginas) para que solo muestre datos de "Alta Velocidad".</p>
                 <ol class="list-decimal pl-5 space-y-2">
                     <li><strong>Activar Panel:</strong> Asegúrate de que el panel "Filtros" esté visible (pestaña "Ver").</li>
-                    <li><strong>Añadir Filtro:</strong> Arrastra `Dim_Lineas[Tipo_Servicio]` al panel "Filtros".</li>
+                    <li><strong>Añadir Filtro:</strong> Arrastra `Lineas[Tipo_Servicio]` al panel "Filtros".</li>
                     <li><strong>Configurar Alcance:</strong> Arrástralo a la tarjeta que dice "Filtros de todas las páginas".</li>
                     <li><strong>Aplicar Filtro:</strong> En la tarjeta del filtro, selecciona "Alta Velocidad".</li>
                     <li>Ahora, todas las páginas de tu informe (Página 1, Página 2...) estarán filtradas por "Alta Velocidad".</li>
