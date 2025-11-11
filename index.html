@@ -319,7 +319,7 @@
                             <li>Renombra todas sus columnas para que coincidan <strong>exactamente</strong> con `Viajes_2024` (ej. `Fecha_Operacion` -> `Fecha`, `Cod_Linea` -> `ID_Linea`, etc.).</li>
                             <li>Ve a la pestaña "Inicio" > "Combinar" > "Anexar consultas" > <strong>"Anexar consultas como nueva"</strong>.</li>
                             <li>En la ventana, anexa `Viajes_2024` (como tabla principal) y `Viajes_2023` (como segunda tabla).</li>
-                            <li>Renombra esta nueva consulta unificada (que tiene ~500 filas) a `Fact_Viajes` (o `VIAJES` si prefieres tus nombres).</li>
+                            <li>Renombra esta nueva consulta unificada (que tiene ~500 filas) a `Viajes` (o `VIAJES` si prefieres tus nombres).</li>
                         </ul>
                     </li>
                     
@@ -329,7 +329,7 @@
                         </ul>
                     </li>
                     
-                    <li><strong>Limpiar Tipos de Datos:</strong> En `Fact_Viajes`, asegura que `Fecha` sea tipo *Fecha*, `Pasajeros` y `Retraso_Minutos` sean *Número entero*, e `Ingresos` sea *Número decimal*.</li>
+                    <li><strong>Limpiar Tipos de Datos:</strong> En `Viajes`, asegura que `Fecha` sea tipo *Fecha*, `Pasajeros` y `Retraso_Minutos` sean *Número entero*, e `Ingresos` sea *Número decimal*.</li>
                     
                     <li><strong>Deshabilitar Carga:</strong> Haz clic derecho en las consultas originales `Viajes_2024` y `Viajes_2023` y desmarca "Habilitar carga". Esto es crucial para no cargar datos duplicados y mantener el modelo limpio.</li>
                     
@@ -394,18 +394,18 @@
                     </li>
                     <li><strong>Crear Relaciones (Vista de Modelo):</strong>
                         <ul class="list-circle pl-6 mt-2">
-                            <li>`Dim_Calendario[Date]` (1) -> `Fact_Viajes[Fecha]` (*)</li>
-                            <li>`Dim_Lineas[ID_Linea]` (1) -> `Fact_Viajes[ID_Linea]` (*)</li>
-                            <li>`Dim_Flota[ID_Tren]` (1) -> `Fact_Viajes[ID_Tren]` (*)</li>
+                            <li>`Dim_Calendario[Date]` (1) -> `Viajes[Fecha]` (*)</li>
+                            <li>`Dim_Lineas[ID_Linea]` (1) -> `Viajes[ID_Linea]` (*)</li>
+                            <li>`Dim_Flota[ID_Tren]` (1) -> `Viajes[ID_Tren]` (*)</li>
                         </ul>
                     </li>
                     <li><strong>Reto: Relaciones de Doble Rol (Estaciones):</strong>
                         <ul class="list-circle pl-6 mt-2">
-                            <li>Crea una relación <strong>ACTIVA</strong>: `Dim_Estaciones[ID_Estacion]` (1) -> `Fact_Viajes[ID_Estacion_Origen]` (*)</li>
-                            <li>Crea una relación <strong>INACTIVA</strong>: `Dim_Estaciones[ID_Estacion]` (1) -> `Fact_Viajes[ID_Estacion_Destino]` (*). (Power BI la creará inactiva automáticamente).</li>
+                            <li>Crea una relación <strong>ACTIVA</strong>: `Dim_Estaciones[ID_Estacion]` (1) -> `Viajes[ID_Estacion_Origen]` (*)</li>
+                            <li>Crea una relación <strong>INACTIVA</strong>: `Dim_Estaciones[ID_Estacion]` (1) -> `Viajes[ID_Estacion_Destino]` (*). (Power BI la creará inactiva automáticamente).</li>
                         </ul>
                     </li>
-                    <li><strong>Ocultar Claves Foráneas:</strong> En `Fact_Viajes`, oculta todas las columnas de ID (`ID_Linea`, `ID_Tren`, `ID_Estacion_Origen`, `ID_Estacion_Destino`, `Fecha`) de la vista de informe.</li>
+                    <li><strong>Ocultar Claves Foráneas:</strong> En `Viajes`, oculta todas las columnas de ID (`ID_Linea`, `ID_Tren`, `ID_Estacion_Origen`, `ID_Estacion_Destino`, `Fecha`) de la vista de informe.</li>
                 </ul>
             </div>
         </details>
@@ -435,10 +435,10 @@ ADDCOLUMNS (
                 
                 <p class="font-semibold text-lg mt-2">Medidas Básicas:</p>
                 <div class="bg-gray-50 p-3 rounded-lg border">
-<pre><code>Total Pasajeros = SUM(Fact_Viajes[Pasajeros])
-Total Ingresos = SUM(Fact_Viajes[Ingresos])
-Total Viajes = COUNTROWS(Fact_Viajes)
-Retraso Medio (min) = AVERAGE(Fact_Viajes[Retraso_Minutos])
+<pre><code>Total Pasajeros = SUM(Viajes[Pasajeros])
+Total Ingresos = SUM(Viajes[Ingresos])
+Total Viajes = COUNTROWS(Viajes)
+Retraso Medio (min) = AVERAGE(Viajes[Retraso_Minutos])
 </code></pre>
                     <p class="text-sm mt-2 text-gray-600"><strong>Propósito:</strong> Agregaciones simples que calculan los totales y el promedio de retraso. <strong>`SUM`</strong> suma una columna, <strong>`COUNTROWS`</strong> cuenta filas y <strong>`AVERAGE`</strong> calcula la media.</p>
                 </div>
@@ -449,22 +449,22 @@ Retraso Medio (min) = AVERAGE(Fact_Viajes[Retraso_Minutos])
 VAR ViajesConRetraso = 
     CALCULATE(
         [Total Viajes],
-        Fact_Viajes[Retraso_Minutos] &gt; 0
+        Viajes[Retraso_Minutos] &gt; 0
     )
 RETURN
     DIVIDE( ViajesConRetraso, [Total Viajes] )
 
 % Ocupacion Media = 
 AVERAGEX(
-    Fact_Viajes,
+    Viajes,
     DIVIDE(
-        Fact_Viajes[Pasajeros],
+        Viajes[Pasajeros],
         RELATED(Dim_Flota[Capacidad_Maxima])
     )
 )
 </code></pre>
                     <p class="text-sm mt-2 text-gray-600"><strong>`% de Viajes con Retraso`</strong>: Usa <strong>`CALCULATE`</strong> para modificar el contexto de filtro y contar solo los viajes donde `Retraso_Minutos > 0`. Luego <strong>`DIVIDE`</strong> de forma segura (evita errores de división por cero).</p>
-                    <p class="text-sm mt-2 text-gray-600"><strong>`% Ocupacion Media`</strong>: Usa <strong>`AVERAGEX`</strong> para iterar fila por fila de la tabla `Fact_Viajes`. En cada fila, usa <strong>`RELATED`</strong> para "saltar" de la tabla `Fact_Viajes` a `Dim_Flota` (a través de la relación) y coger la `Capacidad_Maxima` de ese tren. Finalmente, calcula el promedio de todas esas ocupaciones individuales.</p>
+                    <p class="text-sm mt-2 text-gray-600"><strong>`% Ocupacion Media`</strong>: Usa <strong>`AVERAGEX`</strong> para iterar fila por fila de la tabla `Viajes`. En cada fila, usa <strong>`RELATED`</strong> para "saltar" de la tabla `Viajes` a `Dim_Flota` (a través de la relación) y coger la `Capacidad_Maxima` de ese tren. Finalmente, calcula el promedio de todas esas ocupaciones individuales.</p>
                 </div>
 
                 <p class="font-semibold text-lg mt-2">Medidas de Time Intelligence:</p>
@@ -488,7 +488,7 @@ CALCULATE(
     [Total Viajes],
     USERELATIONSHIP(
         Dim_Estaciones[ID_Estacion],
-        Fact_Viajes[ID_Estacion_Destino]
+        Viajes[ID_Estacion_Destino]
     )
 )
 </code></pre>
